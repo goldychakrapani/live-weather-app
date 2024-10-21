@@ -11,8 +11,12 @@ async function checkweather(city)
 {
     const response = await fetch(apiUrl + city +`&appid=${apiKey}`);
     let data = await response.json();  //java script object notation
+     if (data.cod === "404") {
+        // City not found, display an alert
+        alert("City not found. Please enter a valid city name.");
+        return;
+    }
     console.log(data);
-
     document.querySelector(".city").innerHTML = data.name;
     document.querySelector(".temp").innerHTML = Math.round(data.main.temp)+ "°c";
     document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
@@ -45,3 +49,9 @@ searchBtn.addEventListener("click", ()=>{
 
     checkweather(searchBox.value);
 })
+searchBox.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault(); 
+        checkweather(searchBox.value);
+    }
+});
